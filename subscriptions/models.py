@@ -31,24 +31,17 @@ class Subscription(models.Model):
     )
     plan = models.ForeignKey(
         "subscriptions.Plan",
-        on_delete=models.CASCADE,
         null=True,
         blank=True,
+        on_delete=models.CASCADE,
         related_name="subscription_plan",
     )
     user = models.ForeignKey(
         "users.User",
-        on_delete=models.CASCADE,
         null=True,
         blank=True,
+        on_delete=models.CASCADE,
         related_name="subscription_user",
-    )
-    app = models.ForeignKey(
-        "app.Application",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="subscription_app",
     )
 
 
