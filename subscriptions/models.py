@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import QuerySet
+
+from home.models import BaseModel
 
 
-class Plan(models.Model):
+class Plan(BaseModel):
     "Generated Model"
     name = models.CharField(
         max_length=20,
@@ -12,37 +15,55 @@ class Plan(models.Model):
         max_digits=30,
         decimal_places=10,
     )
-    created_at = models.DateTimeField(
-        auto_now=True,
-    )
-    updated_at = models.DateTimeField(
-        auto_now_add=True,
-    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
-class Subscription(models.Model):
+class CustomQuerySet(QuerySet):
+    def delete(self):
+        self.update(active=False)
+
+
+class SubscriptionManager(models.Manager):
+    def active(self):
+        return self.model.objects.filter(active=True)
+
+    def get_queryset(self):
+        return CustomQuerySet(self.model, using=self._db)
+
+
+class Subscription(BaseModel):
     "Generated Model"
-    active = models.BooleanField()
-    created_at = models.DateTimeField(
-        auto_now=True,
-    )
-    updated_at = models.DateTimeField(
-        auto_now_add=True,
-    )
+    active = models.BooleanField(default=True)
     plan = models.ForeignKey(
         "subscriptions.Plan",
         null=True,
         blank=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="subscription_plan",
     )
     user = models.ForeignKey(
         "users.User",
         null=True,
         blank=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="subscription_user",
     )
+    app = models.OneToOneField(
+        "applications.App",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="subscription_app",
+    )
 
+    objects = SubscriptionManager()
 
-# Create your models here.
+    def delete(self, **kwargs):
+        self.active = False
+        self.save(update_fields=('active',))
+
+    def __str__(self):
+        return f"{self.user.username} - {self.plan.name} - {self.app.name}"

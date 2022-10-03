@@ -1,7 +1,12 @@
 from django.contrib import admin
 from .models import Plan, Subscription
 
-admin.site.register(Plan)
-admin.site.register(Subscription)
 
-# Register your models here.
+class SubscriptionAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        query = super(SubscriptionAdmin, self).get_queryset(request)
+        return query.filter(active=True)
+
+
+admin.site.register(Plan)
+admin.site.register(Subscription, SubscriptionAdmin)

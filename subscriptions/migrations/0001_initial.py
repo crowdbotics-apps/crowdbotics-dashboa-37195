@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("app", "0001_initial"),
+        ("applications", "0001_initial"),
     ]
 
     operations = [
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="subscription_app",
-                        to="app.Application",
+                        to="applications.App",
                     ),
                 ),
                 (

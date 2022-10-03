@@ -34,7 +34,6 @@ urlpatterns = [
     path("rest-auth/registration/account-confirm-email/<str:key>/", confirm_email),
     path("rest-auth/registration/", include("rest_auth.registration.urls")),
     path("api/v1/", include("users.api.v1.urls")),
-    path("api/v1/", include("app.api.v1.urls")),
     path("api/v1/", include("subscriptions.api.v1.urls")),
     path("subscriptions/", include("subscriptions.urls")),
     path("api/v1/", include("applications.api.v1.urls")),

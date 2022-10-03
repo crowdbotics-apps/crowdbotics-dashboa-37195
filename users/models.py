@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from home.models import BaseModel
 
 
 class User(AbstractUser):
@@ -26,30 +27,3 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
-
-
-class UserDetails(models.Model):
-    "Generated Model"
-    user = models.OneToOneField(
-        "users.User",
-        on_delete=models.CASCADE,
-        related_name="userdetails_user",
-    )
-    username = models.CharField(
-        max_length=50,
-    )
-    email = models.EmailField(
-        max_length=254,
-    )
-    first_name = models.CharField(
-        max_length=100,
-    )
-    last_name = models.CharField(
-        max_length=100,
-    )
-    created_at = models.DateTimeField(
-        auto_now=True,
-    )
-    updated_at = models.DateTimeField(
-        auto_now_add=True,
-    )
