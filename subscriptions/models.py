@@ -6,7 +6,9 @@ from home.models import BaseModel
 
 
 class Plan(BaseModel):
-    "Generated Model"
+    """
+    Pricing plan
+    """
     name = models.CharField(
         max_length=20,
     )
@@ -35,7 +37,9 @@ class SubscriptionManager(models.Manager):
 
 
 class Subscription(BaseModel):
-    "Generated Model"
+    """
+    App subscriptions
+    """
     active = models.BooleanField(default=True)
     plan = models.ForeignKey(
         "subscriptions.Plan",

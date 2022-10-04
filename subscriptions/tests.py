@@ -163,7 +163,7 @@ class SubscriptionViewsetTest(TestCase):
         self.app = App.objects.create(
             name="test app",
             framework="Django",
-            type="Web",
+            type=App.APP_TYPE_WEB,
             user=self.test_user
         )
 
@@ -171,7 +171,7 @@ class SubscriptionViewsetTest(TestCase):
         app_data = {
             "name": "Subscription App",
             "description": "Testing subscription App",
-            "type": "Web",
+            "type": App.APP_TYPE_WEB,
             "framework": "Django",
         }
         request_ = self.factory.post('/api/v1/subscription/', app_data)
@@ -191,7 +191,7 @@ class SubscriptionViewsetTest(TestCase):
         app_data = {
             "name": "Subscription App",
             "description": "Testing subscription App",
-            "type": "Web",
+            "type": App.APP_TYPE_WEB,
             "framework": "Django",
         }
         request_ = self.factory.post('/api/v1/subscription/', app_data)
@@ -233,7 +233,7 @@ class SubscriptionViewsetTest(TestCase):
         app = App.objects.create(
             name="testing app",
             framework="Django",
-            type="Web",
+            type=App.APP_TYPE_WEB,
             user=self.test_user
         )
         sub = Subscription.objects.create(

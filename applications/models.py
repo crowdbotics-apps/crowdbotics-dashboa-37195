@@ -4,14 +4,22 @@ from home.models import BaseModel
 
 
 class App(BaseModel):
-    "Generated Model"
+    """
+    User applications
+    """
+    APP_TYPE_WEB = "Web"
+    APP_TYPE_MOBILE = "Mobile"
+
     APP_TYPE_CHOICES = (
-        ("Web", "Web"),
-        ("Mobile", "Mobile"),
+        (APP_TYPE_WEB, "Web"),
+        (APP_TYPE_MOBILE, "Mobile"),
     )
+
+    FRAMEWORK_DJANGO = "Django"
+    FRAMEWORK_REACT_NATIVE = "React Native"
     FRAMEWORK_CHOICES = (
-        ("Django", "Django"),
-        ("React Native", "React Native"),
+        (FRAMEWORK_DJANGO, "Django"),
+        (FRAMEWORK_REACT_NATIVE, "React Native"),
     )
     name = models.CharField(
         max_length=50, unique=True
