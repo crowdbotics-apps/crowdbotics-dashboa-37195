@@ -5,12 +5,12 @@ from subscriptions.models import Subscription, Plan
 
 
 class AppSerializer(serializers.ModelSerializer):
-    name = serializers.CharField()
+    name = serializers.CharField(required=False)
     description = serializers.CharField(required=False)
-    domain_name = serializers.CharField()
-    type = serializers.CharField()
-    framework = serializers.CharField()
-    screenshot = serializers.URLField()
+    domain_name = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
+    framework = serializers.CharField(required=False)
+    screenshot = serializers.URLField(required=False)
     user = serializers.PrimaryKeyRelatedField(
         read_only=True,
         default=serializers.CurrentUserDefault()

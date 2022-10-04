@@ -25,6 +25,8 @@ class App(BaseModel):
     )
     domain_name = models.CharField(
         max_length=253,
+        blank=True,
+        null=True
     )
     screenshot = models.URLField(blank=True, null=True)
     user = models.ForeignKey(
