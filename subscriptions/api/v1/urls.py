@@ -10,7 +10,8 @@ urlpatterns = [
     path(
         'subscription/<int:app_id>/',
         AppSubscriptionViewSet.as_view({"get": "list",
-                                        "patch": "update", "delete": "destroy"}),
+                                        "patch": "update",
+                                        "delete": "destroy"}),
         name='app_subscription',
     )
 ]

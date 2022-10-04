@@ -41,6 +41,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         authentication.TokenAuthentication,
     )
     queryset = Subscription.objects.all()
+    paginator = None
 
     permission_classes = (IsAuthenticated, OwnerPermission)
 
@@ -51,7 +52,9 @@ class AppSubscriptionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, OwnerPermission)
 
     def get_object(self):
-        return Subscription.objects.get(app__id=self.kwargs['app_id'])
+        obj = Subscription.objects.get(app__id=self.kwargs['app_id'])
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def list(self, request, *args, **kwargs):
         subscription = self.get_object()
@@ -59,7 +62,7 @@ class AppSubscriptionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        plan_id = request.data.pop("plan")
+        plan_id = request.data.get("plan")
         plan = Plan.objects.get(name="Free")
         try:
             plan = Plan.objects.get(id=plan_id)
