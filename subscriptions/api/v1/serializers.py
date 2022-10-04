@@ -4,6 +4,10 @@ from subscriptions.models import Plan, Subscription
 
 
 class PlanSerializer(serializers.ModelSerializer):
+    description = serializers.CharField(required=False)
+    name = serializers.CharField(required=False)
+    price = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)
+
     class Meta:
         model = Plan
         exclude = ("created_at", "updated_at")

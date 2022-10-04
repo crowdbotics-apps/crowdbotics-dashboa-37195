@@ -1,5 +1,5 @@
 from rest_framework import authentication, permissions, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 
 from home.permissions import OwnerPermission
@@ -8,19 +8,30 @@ from .serializers import PlanSerializer, SubscriptionSerializer, AppSubscription
 from rest_framework import viewsets
 
 
+class ActionBasedPermission(AllowAny):
+    """
+    Grant or deny access to a view, based on a mapping in view.action_permissions
+    """
+    def has_permission(self, request, view):
+        for klass, actions in getattr(view, 'action_permissions', {}).items():
+            if view.action in actions:
+                return klass().has_permission(request, view)
+        return False
+
+
 class PlanViewSet(viewsets.ModelViewSet):
     serializer_class = PlanSerializer
     authentication_classes = (
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+    action_permissions = {
+        IsAdminUser: ['update', 'partial_update', 'destroy', 'create'],
+        IsAuthenticated: ['retrieve', 'list']
+    }
     queryset = Plan.objects.all()
-
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return request.user.is_superuser
+    permission_classes = (ActionBasedPermission,)
+    paginator = None
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):

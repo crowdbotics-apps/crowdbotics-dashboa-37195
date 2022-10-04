@@ -2,9 +2,8 @@ from django.test import TestCase
 
 from applications.api.v1.viewsets import AppViewSet
 from applications.models import App
-from subscriptions.models import Subscription
 from users.admin import User
-from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
+from rest_framework.test import APIRequestFactory, force_authenticate
 
 
 class AppViewsetTest(TestCase):
@@ -61,6 +60,23 @@ class AppViewsetTest(TestCase):
 
         self.assertEqual(
             response.status_code, 200)
+
+    def test_unauthorised_updating_app(self):
+        app = App.objects.create(
+            name="Update App",
+            user=self.test_user,
+            type="Web",
+            framework="Django"
+        )
+        update_data = {
+            "description": "Update app description"
+        }
+        request = self.factory.patch(f'/api/v1/app/{app.id}/', update_data)
+        view = AppViewSet.as_view({'patch': 'update'})
+        response = view(request, pk=app.id)
+
+        self.assertEqual(
+            response.status_code, 403)
 
     def test_deleting_app(self):
         app = App.objects.create(
